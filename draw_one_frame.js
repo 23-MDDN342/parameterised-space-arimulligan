@@ -15,6 +15,7 @@ function draw_one_frame() {
 		// 	}
 		// }
 		
+	// next need to create shell, then make shell scroll while doing one bounce into the center of the ripple
 	drawRipple(y, 1, 1);
 }
 
