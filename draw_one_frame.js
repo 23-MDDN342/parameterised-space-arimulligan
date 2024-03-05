@@ -10,23 +10,29 @@ function draw_one_frame() {
 	a -= 2;
 	b -= 2;
 	strokeWeight(1);
-	translate(width / 2, height / 2);
-	for (var i = 0; i < 15; i++) {
-		for (var k = 0; k < 20; k++) {
-			stroke(255, 255, 255);
-			rotate(PI / 12.0);
-			fill(255, 255 - i * 10, 255 - k * 10);
-			line(a % 100, b % 100, x % 300, y % 300);
-			ellipse((x + i * 20) % width, (y + k * 20) % height, i + 4, i + 4);
-			drawtriangle((a - i * 20) % width, (b - k * 20) % height, k / 8);
-			rect(x % width, y % height, k + 10, k + 10);
-			fill(0, i * 10, 255 - k * 10);
-			ellipse((x - i * 20) % width, (y - k * 20) % height, i + 3, i + 3);
-			rotate(PI / 24.0);
-			fill(255 - (i + k) * 5, (i + k) * 7, i * 20);
-			drawtriangle((a + i * 20) % width, (b + k * 20) % height, k / 8);
-			rect(a % width, b % height, k + 5, k + 5);
-			drawflower(k, x);
+	// for (var i = 0; i < 15; i++) {
+	// 	for (var k = 0; k < 20; k++) {
+	// 		stroke(255, 255, 255);
+	// 		rotate(PI / 12.0);
+	// 		fill(255, 255 - i * 10, 255 - k * 10);
+	// 		line(a % 100, b % 100, x % 300, y % 300);
+	// 		ellipse((x + i * 20) % width, (y + k * 20) % height, i + 4, i + 4);
+	// 		drawtriangle((a - i * 20) % width, (b - k * 20) % height, k / 8);
+	// 		rect(x % width, y % height, k + 10, k + 10);
+	// 		fill(0, i * 10, 255 - k * 10);
+	// 		ellipse((x - i * 20) % width, (y - k * 20) % height, i + 3, i + 3);
+	// 		rotate(PI / 24.0);
+	// 		fill(255 - (i + k) * 5, (i + k) * 7, i * 20);
+	// 		drawtriangle((a + i * 20) % width, (b + k * 20) % height, k / 8);
+	// 		rect(a % width, b % height, k + 5, k + 5);
+	// 		drawflower(k, x);
+	// 	}
+	// }
+	noFill();
+
+	for (var i = 0; i < 10; i++){
+		for (var k = 0; k < 6; k++){
+			drawRipple(y, i, k);
 		}
 	}
 
@@ -45,5 +51,15 @@ function drawflower(i, k) {
 		fill(k % 255, 0, 255);
 		stroke(0, (k * 0.4) % 255, 255);
 		arc(0, 0, (100 + 100 * cos(k * PI / 24)) % 255, 50, 0, PI / 20);
+	}
+}
+
+function drawRipple(height, gridX, gridY){
+	for (let i = 3; i < 10; i++) {
+		// let y = height / 2 + sin(frameCount * 0.05 - i * 0.4) * 20;
+		let y = getNoiseValue(i, height / 2, 1, "backgroundGrid", 3, 50, 30);
+		// stroke(10, map(y, 270, 330, 80, 20), 80);
+		stroke('white')
+		ellipse((width / 9) * gridX, y + (gridY * 100), i * 30, i * 15);
 	}
 }

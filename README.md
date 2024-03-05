@@ -7,8 +7,8 @@ I was inspired by stone skipping, and replaced this idea with a cute shell, as i
 With the parametric side, I would do multiple shells coming from either side of the water, either simultaneously or staggered.
 In terms of colour palette, it would be blue hues and sandy coloured sea shells.
 
-EXAMPLE README 
-Update this! 
+EXAMPLE README
+Update this!
 
 This design is inspired by fireworks and flowers. I want it to be full of changes, so that every frame can have a fresh feeling.
 
