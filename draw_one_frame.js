@@ -4,7 +4,7 @@ var a = 100;
 var b = 100;
 // this is the fireworks example
 function draw_one_frame() {
-	//background(255);
+	background(10, getNoiseValue(0, height / 2, 1, "backgroundGrid", 3, 50, 30), 150);
 	x += 2;
 	y += 2;
 	a -= 2;
@@ -30,12 +30,12 @@ function draw_one_frame() {
 	// }
 	noFill();
 
-	for (var i = 0; i < 10; i++){
-		for (var k = 0; k < 6; k++){
-			drawRipple(y, i, k);
-		}
-	}
-
+	// for (var i = 0; i < 3; i++){
+	// 	for (var k = 0; k < 3; k++){
+		// 	}
+		// }
+		
+				drawRipple(y, 1, 1);
 }
 
 function drawtriangle(x, y, r) {
@@ -55,11 +55,12 @@ function drawflower(i, k) {
 }
 
 function drawRipple(height, gridX, gridY){
-	for (let i = 3; i < 10; i++) {
+	for (let i = 0; i < 150; i++) {
 		// let y = height / 2 + sin(frameCount * 0.05 - i * 0.4) * 20;
-		let y = getNoiseValue(i, height / 2, 1, "backgroundGrid", 3, 50, 30);
-		// stroke(10, map(y, 270, 330, 80, 20), 80);
-		stroke('white')
-		ellipse((width / 9) * gridX, y + (gridY * 100), i * 30, i * 15);
+		let y = getNoiseValue(i, height / 2, 1, "backgroundGrid", 3, 50, 30) + (gridY * 150) + 100;
+		let colourValue = getNoiseValue(i, height / 2, 1, "hi", 0, 300, 1)
+		stroke(112,128,144);
+		// stroke('white')
+		ellipse((width / 9) + (gridX * 300) + 50, y, i * 5, i * 2.5);
 	}
 }
