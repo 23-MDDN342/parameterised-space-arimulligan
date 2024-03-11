@@ -1,122 +1,117 @@
 function draw_one_frame(cur_frac) {
-  stroke(0);
-  angleMode(DEGREES);
-  rectMode(CENTER)
-  fill(100, 100, 100);
+  // variables
+  let  middleY = cos(cur_frac * 6) * 30 + height/2
+  let bottomY = sin(cur_frac * 6) * 30 + height/1.3
+  let  topY = sin(cur_frac * 6) * 30 + height/5
+  let curve = sin(cur_frac * 6) * 30;
 
-  let b1_y = 0.55 * height;
-  let b2_y = 0.85 * height;
-  let b3_y = 0.25 * height;
+  let frog_size = height/12;
 
-  let b1_size = height/12;
-
-  let grid_points1 = [
+  let grid_points_left = [
    -0.25 * width,
     0.25 * width,
     0.75 * width,
     1.25 * width
   ]
 
-  if (debugView) {
-    stroke(255, 0, 0);
-    strokeWeight(height/100);
-    noFill();
-    for(let i=0; i<grid_points1.length; i++) {
-      draw_froggy(grid_points1[i], b1_y, b1_size, true)
-    }    
-  }
+  // middle
+  draw_frog_row(debugView, grid_points_left, middleY, frog_size, true, cur_frac, curve);
 
-  fill(100, 100, 100);
-  noStroke();
-  for(let i=0; i<grid_points1.length-1; i++) {
-    let cur_x_pos = map(cur_frac, 0, 1, grid_points1[i], grid_points1[i+1])
-    draw_froggy(cur_x_pos, b1_y, b1_size, false)
-  }
-
-  let grid_points2 = [
+  let grid_points_right = [
     1.10 * width,
     0.60 * width,
     0.10 * width,
     -0.40 * width
   ]
 
-  if(debugView) {
+  // bottom
+  draw_frog_row(debugView, grid_points_right, bottomY, frog_size, false, cur_frac, curve)
+
+  // top one
+  draw_frog_row(debugView, grid_points_right, topY, frog_size, false, cur_frac, curve)
+}
+
+function draw_frog_row(debugView, grid_points, y, size, leftToRight, cur_frac, curve){
+  let isJumping = curve < 1;
+  
+  if (debugView) {
     stroke(255, 0, 0);
     strokeWeight(height/100);
-    noFill(); 
-    for(let i=0; i<grid_points2.length; i++) {
-      push();
-      scale(-1, 1);
-      translate(-grid_points2[i], b2_y)
-      draw_froggy(0, 0, b1_size, true)
-      pop();
-    }    
+    noFill();
+    for(let i=0; i<grid_points.length; i++) {
+      if (leftToRight){
+        draw_froggy(grid_points[i], y, size, true, !isJumping)
+      }
+      else {
+        push();
+        scale(-1, 1);
+        translate(-grid_points[i], y)
+        draw_froggy(0, 0, size, true, isJumping)
+        pop();
+      }
+    }
   }
 
   fill(100, 100, 100);
   noStroke();
-  for(let i=0; i<grid_points2.length-1; i++) {
-    let cur_x_pos = map(cur_frac, 0, 1, grid_points2[i], grid_points2[i+1])
-    push();
-    scale(-1, 1);
-    translate(-cur_x_pos, b2_y)
-    draw_froggy(0, 0, b1_size, false)
-    pop();
-  }
-
-  /// third oneeee
-  if(debugView) {
-    stroke(255, 0, 0);
-    strokeWeight(height/100);
-    noFill(); 
-    for(let i=0; i<grid_points2.length; i++) {
+  for(let i=0; i<grid_points.length-1; i++) {
+    let cur_x_pos = map(cur_frac, 0, 1, grid_points[i], grid_points[i+1])
+    if (leftToRight){
+      draw_froggy(cur_x_pos, y, size, false, !isJumping)
+    }
+    else {
       push();
       scale(-1, 1);
-      translate(-grid_points2[i], b3_y)
-      draw_froggy(0, 0, b1_size, true)
+      translate(-cur_x_pos, y)
+      draw_froggy(0, 0, size, false, isJumping)
       pop();
-    }    
-  }
-
-  fill(100, 100, 100);
-  noStroke();
-  for(let i=0; i<grid_points2.length-1; i++) {
-    let cur_x_pos = map(cur_frac, 0, 1, grid_points2[i], grid_points2[i+1])
-    push();
-    scale(-1, 1);
-    translate(-cur_x_pos, b3_y)
-    draw_froggy(0, 0, b1_size, false)
-    pop();
+    }
   }
 }
 
-function draw_froggy(x, y, size, isDebug){
+function draw_froggy(x, y, size, isDebug, isJumping){
+  angleMode(DEGREES); // cause i can't work in radians lol
 
-  
   if (isDebug){
     stroke('red')
     noFill();
-  } 
+  }
   else {
-    
     fill(44, 97, 24)
     stroke('black')
   }
 
   // back foot leg
-  ellipse(x+10, y+25, size/2, size/6)
-  // front foot arm
-  // ellipse(x+12, y+27, size/3, size/6)
+  if (isJumping){
+    ellipse(x-70, y+40, size/2, size/6)
+  }
+  else {
+    ellipse(x+10, y+25, size/2, size/6)
+  }
 
   push();
-    translate(x,y)
-    rotate(-20)
-
-    // back leggy
-    ellipse(0, 15, size, size/2)
-
-    // back arm
-    ellipse(20, 15, size/4, size)
+    translate(x, y)
+    if (isJumping){
+      rotate(-10)
+    
+      // back leggy
+      ellipse(-60, 15, size, size/2)
+  
+      // back arm
+      ellipse(20, 15, size/4, size)
+  
+      // back foot arm
+      ellipse(15, 37, size/3, size/6)
+    }
+    else {
+      rotate(-20)
+  
+      // back leggy
+      ellipse(0, 15, size, size/2)
+  
+      // back arm
+      ellipse(20, 15, size/4, size)
+    }
 
     // body
     ellipse(0, 0, size*2, size*1.1)
@@ -126,16 +121,27 @@ function draw_froggy(x, y, size, isDebug){
   push();
     translate(x,y)
     rotate(-30)
-    ellipse(-30, -5, size, size/2)
+    if (isJumping){
+      ellipse(-60, -15, size, size/2)
+    }
+    else {
+      ellipse(-30, -5, size, size/2)
+    }
 
     // front arm
     ellipse(20, 25, size/5, size)
   pop();
 
-  // front foot leg 
-  ellipse(x-20, y+25, size/2, size/4)
-  // front foot arm
-  ellipse(x+42, y+27, size/3, size/6)
+  if (isJumping){
+    // front foot leg
+    ellipse(x-90, y+35, size/2, size/4)
+    // front foot arm
+    ellipse(x+35, y+30, size/3, size/6)
+  }
+  else {
+    ellipse(x-20, y+25, size/2, size/4)
+    ellipse(x+42, y+27, size/3, size/6)
+  }
 
   // head
   ellipse(x+38, y-35, size/2, size/2.4) // back eye
@@ -153,6 +159,9 @@ function draw_froggy(x, y, size, isDebug){
   //  smile
   noFill()
   arc(x+35, y-20, 15, 15, 0, 150, OPEN);
+
+  angleMode(RADIANS); // changing it back for cosine function
 }
+
 // rippl e- need more contrast - and has a beat to it - should keep it like that?
-// should do multiple different submissions with different experiments 
+// should do multiple different submissions with different experiments
