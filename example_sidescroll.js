@@ -1,8 +1,25 @@
+const ease = new p5.Ease();
+
 function draw_one_frame(cur_frac) {
-  // variables
-  let  middleY = cos(cur_frac * 6) * 30 + height/2
+  // ripple stuff
+  background('black');
+
+  // top and bottom ripples
+  for (var i = 0; i < 3; i++){
+		for (var k = 0; k < 2; k++){
+      drawRipple(i*1.2, k*1.6, cur_frac, 10, -100);
+		}
+	}
+
+  // middle ripples
+  for (var i = 0; i < 3; i++){
+    drawRipple(i*1.4, 0.9, cur_frac, 15, 150);
+  }
+
+  // frog jumping stuff - variables
+  let middleY = cos(cur_frac * 6) * 30 + height/2
   let bottomY = sin(cur_frac * 6) * 30 + height/1.3
-  let  topY = sin(cur_frac * 6) * 30 + height/5
+  let topY = sin(cur_frac * 6) * 30 + height/5
   let curve = sin(cur_frac * 6) * 30;
 
   let frog_size = height/12;
@@ -31,13 +48,25 @@ function draw_one_frame(cur_frac) {
   draw_frog_row(debugView, grid_points_right, topY, frog_size, false, cur_frac, curve)
 }
 
+function drawRipple(gridX, gridY, cur_frac, size, startingX){
+	for (let i = 10; i > 0; i--) {
+    let y = 0;
+    if (startingX < 0){
+      y = gridY + cos(cur_frac * 6 - i * 0.4) * 5;
+    }else {
+      y = gridY + sin(cur_frac * 6 - i * 0.4) * 9;
+    }
+    fill(10, 50, 250, 5*i);
+		stroke('blue');
+
+		ellipse((width / 15) + (gridX * 400) + startingX, y + (gridY * 200) + 150, i * 4 * size, i * 2 * size);
+	}
+}
+
 function draw_frog_row(debugView, grid_points, y, size, leftToRight, cur_frac, curve){
   let isJumping = curve < 1;
   
   if (debugView) {
-    stroke(255, 0, 0);
-    strokeWeight(height/100);
-    noFill();
     for(let i=0; i<grid_points.length; i++) {
       if (leftToRight){
         draw_froggy(grid_points[i], y, size, true, !isJumping)
@@ -52,14 +81,15 @@ function draw_frog_row(debugView, grid_points, y, size, leftToRight, cur_frac, c
     }
   }
 
-  fill(100, 100, 100);
-  noStroke();
   for(let i=0; i<grid_points.length-1; i++) {
-    let cur_x_pos = map(cur_frac, 0, 1, grid_points[i], grid_points[i+1])
     if (leftToRight){
+      const ease_amount_across = ease.sineOut(cur_frac);
+      let cur_x_pos = map(ease_amount_across, 0, 1, grid_points[i], grid_points[i+1])
       draw_froggy(cur_x_pos, y, size, false, !isJumping)
     }
     else {
+      const ease_amount_across = ease.quadraticIn(cur_frac);
+      let cur_x_pos = map(ease_amount_across, 0, 1, grid_points[i], grid_points[i+1])
       push();
       scale(-1, 1);
       translate(-cur_x_pos, y)
@@ -77,8 +107,9 @@ function draw_froggy(x, y, size, isDebug, isJumping){
     noFill();
   }
   else {
-    fill(44, 97, 24)
-    stroke('black')
+    fill(130, 5, 247) // main body purple
+    stroke('blue') //78, 24, 105
+    strokeWeight(5)
   }
 
   // back foot leg
@@ -148,15 +179,15 @@ function draw_froggy(x, y, size, isDebug, isJumping){
   ellipse(x+30, y-25, size/1.1, size/1.5)
   
   // eye stuff
+  strokeWeight(2)
   ellipse(x+25, y-35, size/2, size/2.4)
 
-  fill('white')
   ellipse(x+25, y-35, size/4, size/4)
 
   fill('black')
   circle(x+28, y-35, size/5)
 
-  //  smile
+  // smile
   noFill()
   arc(x+35, y-20, 15, 15, 0, 150, OPEN);
 
