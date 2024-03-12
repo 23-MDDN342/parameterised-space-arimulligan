@@ -7,13 +7,13 @@ function draw_one_frame(cur_frac) {
   // top and bottom ripples
   for (var i = 0; i < 3; i++){
 		for (var k = 0; k < 2; k++){
-      drawRipple(i*1.2, k*1.6, cur_frac, 10, -100);
+      drawRipple(i, k*1.6, cur_frac, 10, -100);
 		}
 	}
 
   // middle ripples
   for (var i = 0; i < 3; i++){
-    drawRipple(i*1.4, 0.9, cur_frac, 15, 150);
+    drawRipple(i*1.35, 0.9, cur_frac, 15, 150);
   }
 
   // frog jumping stuff - variables
@@ -59,7 +59,7 @@ function drawRipple(gridX, gridY, cur_frac, size, startingX){
     fill(10, 50, 250, 5*i);
 		stroke('blue');
 
-		ellipse((width / 15) + (gridX * 400) + startingX, y + (gridY * 200) + 150, i * 4 * size, i * 2 * size);
+		ellipse((width / 15) + (gridX * 400) + startingX, y + (gridY * 200) + 150, i * 4 * size + 60, i * 2 * size + 30);
 	}
 }
 
@@ -88,7 +88,7 @@ function draw_frog_row(debugView, grid_points, y, size, leftToRight, cur_frac, c
       draw_froggy(cur_x_pos, y, size, false, !isJumping)
     }
     else {
-      const ease_amount_across = ease.quadraticIn(cur_frac);
+      const ease_amount_across = ease.sineIn(cur_frac);
       let cur_x_pos = map(ease_amount_across, 0, 1, grid_points[i], grid_points[i+1])
       push();
       scale(-1, 1);
