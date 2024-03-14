@@ -11,9 +11,11 @@ function draw_one_frame(cur_frac) {
 		}
 	}
 
-  // middle ripples
+  // middle and very top ripples
   for (var i = 0; i < 3; i++){
-    drawRipple(i*1.35, 0.9, cur_frac, 15, 150);
+    drawRipple(i*1.35, 0.9, cur_frac, 7, 150);
+    drawRipple(i*1.35, -0.7, cur_frac, 7, 150);
+    drawRipple(i*1.35, 2.3, cur_frac, 7, 150);
   }
 
   // frog jumping stuff - variables
@@ -49,19 +51,19 @@ function draw_one_frame(cur_frac) {
 }
 
 function drawRipple(gridX, gridY, cur_frac, size, startingX){
-  for (let i = 10; i > 0; i--) {
+  for (let i = 15; i > 0; i--) {
     let x = (width / 15) + (gridX * 400) + startingX;
-    let y = gridY + sin(cur_frac * 6 - i * 0.4) * 15 + (gridY * 200) + 150;
+    let y = gridY + sin(cur_frac * 6 - i * 0.4) * 20 + (gridY * 200) + 150;
     if (startingX < 0){
       x += 80;
     }
-    fill(10, 50, 250, 5*i);
-		stroke('blue');
+    fill(0, 0, 255-(i*15));
+		noStroke();
 
-    let widthfrog = i * 4 * size + 60;
-    let heightfrog = i * 2 * size + 30;
+    let ripple_width = i * 3 * size;
+    let ripple_height = i * 1.5 * size;
 
-		ellipse(x, y, widthfrog, heightfrog);
+		ellipse(x, y, ripple_width, ripple_height);
 	}
 }
 
@@ -87,6 +89,16 @@ function draw_frog_row(debugView, grid_points, y, size, leftToRight, cur_frac, c
     if (leftToRight){
       const ease_amount_across = ease.sineOut(cur_frac);
       let cur_x_pos = map(ease_amount_across, 0, 1, grid_points[i], grid_points[i+1])
+      let cur_x_posdrop = map(ease_amount_across, 0, 3, grid_points[i], grid_points[i+1])
+
+      if (!isJumping){
+        push();
+        translate(width, 0)
+        noStroke();
+        fill('blue')
+        ellipse(-cur_x_posdrop - 50, y, 20, 20)
+        pop();
+      }
       draw_froggy(cur_x_pos, y, size, false, !isJumping)
     }
     else {
@@ -97,21 +109,35 @@ function draw_frog_row(debugView, grid_points, y, size, leftToRight, cur_frac, c
       translate(-cur_x_pos, y)
       draw_froggy(0, 0, size, false, isJumping)
       pop();
+
+      if (isJumping){
+        let cur_x_posdrop = map(ease_amount_across, 0, 3, grid_points[i], grid_points[i+1])
+
+        push();
+        scale(-1, 1);
+        translate(-width, 0);     
+        noStroke();
+        fill('blue')
+        ellipse(cur_x_posdrop, y, 20, 20)
+        pop();
+      }
     }
   }
 }
 
 function draw_froggy(x, y, size, isDebug, isJumping){
   angleMode(DEGREES); // cause i can't work in radians lol
+  drawingContext.shadowBlur = 15;
+  drawingContext.shadowColor = color(0, 109, 0);
 
   if (isDebug){
     stroke('red')
     noFill();
   }
   else {
-    fill(130, 5, 247) // main body purple
-    stroke('blue') //78, 24, 105
-    strokeWeight(5)
+    fill(2, 209, 54); 
+    stroke(0, 109, 0) //78, 24, 105
+    strokeWeight(3)
   }
 
   // back foot leg
@@ -184,8 +210,6 @@ function draw_froggy(x, y, size, isDebug, isJumping){
   strokeWeight(2)
   ellipse(x+25, y-35, size/2, size/2.4)
 
-  ellipse(x+25, y-35, size/4, size/4)
-
   fill('black')
   circle(x+28, y-35, size/5)
 
@@ -194,12 +218,9 @@ function draw_froggy(x, y, size, isDebug, isJumping){
   arc(x+35, y-20, 15, 15, 0, 150, OPEN);
 
   angleMode(RADIANS); // changing it back for cosine function
+  drawingContext.shadowBlur = 0;
 }
 
 // rippl e- need more contrast
 // should do multiple different submissions with different experiments?
-// taking away strokeweight 
-// make stroke righter in center and collor 
-// lerp colour between high value colour and lower value colour - bright blue to dark blue
-// adding light to the frogs
 // making frogs interact with environment - splashing or something?
