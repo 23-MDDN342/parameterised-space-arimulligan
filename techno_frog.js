@@ -7,7 +7,7 @@ function draw_one_frame(cur_frac) {
   // top and bottom ripples
   for (var i = 0; i < 3; i++){
 		for (var k = 0; k < 2; k++){
-      drawRipple(i, k*1.6, cur_frac, 10, -100);
+      drawRipple(i*1.35, k*1.55, cur_frac, 10, -100);
 		}
 	}
 
@@ -49,17 +49,19 @@ function draw_one_frame(cur_frac) {
 }
 
 function drawRipple(gridX, gridY, cur_frac, size, startingX){
-	for (let i = 10; i > 0; i--) {
-    let y = 0;
+  for (let i = 10; i > 0; i--) {
+    let x = (width / 15) + (gridX * 400) + startingX;
+    let y = gridY + sin(cur_frac * 6 - i * 0.4) * 15 + (gridY * 200) + 150;
     if (startingX < 0){
-      y = gridY + cos(cur_frac * 6 - i * 0.4) * 5;
-    }else {
-      y = gridY + sin(cur_frac * 6 - i * 0.4) * 9;
+      x += 80;
     }
     fill(10, 50, 250, 5*i);
 		stroke('blue');
 
-		ellipse((width / 15) + (gridX * 400) + startingX, y + (gridY * 200) + 150, i * 4 * size + 60, i * 2 * size + 30);
+    let widthfrog = i * 4 * size + 60;
+    let heightfrog = i * 2 * size + 30;
+
+		ellipse(x, y, widthfrog, heightfrog);
 	}
 }
 
