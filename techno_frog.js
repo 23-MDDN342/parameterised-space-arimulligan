@@ -196,5 +196,10 @@ function draw_froggy(x, y, size, isDebug, isJumping){
   angleMode(RADIANS); // changing it back for cosine function
 }
 
-// rippl e- need more contrast - and has a beat to it - should keep it like that?
-// should do multiple different submissions with different experiments
+// rippl e- need more contrast
+// should do multiple different submissions with different experiments?
+// taking away strokeweight 
+// make stroke righter in center and collor 
+// lerp colour between high value colour and lower value colour - bright blue to dark blue
+// adding light to the frogs
+// making frogs interact with environment - splashing or something?
