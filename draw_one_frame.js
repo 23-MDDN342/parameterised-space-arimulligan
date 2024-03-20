@@ -5,6 +5,7 @@ var b = 100;
 let count = 0;
 
 let size_hexagons = 20;
+let smaller_sizehexagons = 12;
 // this is the fireworks example
 function draw_one_frame(cur_frac) {
 	x += 2;
@@ -13,6 +14,7 @@ function draw_one_frame(cur_frac) {
 	b -= 2;
 	let yellow_orange = color(242, 183, 5)
 	let orange = color(242, 135, 5)
+	let darker_orange = color(242, 116, 5)
 	let cream = color(242, 213, 160)
 	background(cream);
 
@@ -30,6 +32,14 @@ function draw_one_frame(cur_frac) {
 		for (let x = width/2.5; x < width/1.7; x += x_space) {
 			hexagon(x, y, size_hexagons);
 			hexagon(x + x_offset, y + y_offset, size_hexagons);
+
+			// making orangier outline
+			push();
+			stroke(darker_orange)
+			strokeWeight(3)
+			hexagon(x, y, smaller_sizehexagons, true);
+			hexagon(x + x_offset, y + y_offset, smaller_sizehexagons, true);
+			pop();
 		}
 	}
 
@@ -38,14 +48,23 @@ function draw_one_frame(cur_frac) {
 		for (let x = width/3.4; x < width/1.4; x += x_space) {
 			hexagon(x, y, size_hexagons);
 			hexagon(x + x_offset, y + y_offset, size_hexagons);
+
+			// making orangier outline
+			push();
+			stroke(darker_orange)
+			strokeWeight(3)
+			hexagon(x, y, smaller_sizehexagons, true);
+			hexagon(x + x_offset, y + y_offset, smaller_sizehexagons, true);
+			pop();
 		}
 	}
 
-	honey_drop(width/1.1, 400, cur_frac, yellow_orange, orange, 55)
-	honey_drop(100, 100, cur_frac, yellow_orange, orange, 1)
-	// honey_drop(100, 100, cur_frac, yellow_orange, orange)
-	// honey_drop(100, 100, cur_frac, yellow_orange, orange)
-	
+	honey_drop(width/1.45, height/4, cur_frac, yellow_orange, orange, 30)
+	honey_drop(width/2.9, height/5, cur_frac, yellow_orange, orange, 35);
+	honey_drop(width/2, height/6, cur_frac, yellow_orange, orange, 45);
+	honey_drop(width/1.73, height/1.22, cur_frac, yellow_orange, orange, 40);
+	honey_drop(width/2.6, height/2, cur_frac, yellow_orange, orange, 30);
+
 
 	// for buzzy bees
 	// let scale_height = 0;
@@ -58,6 +77,8 @@ function draw_one_frame(cur_frac) {
 	// 	scale_height = -cur_frac;
 	// }
 
+	// buzzy bees
+
 }
 
 /**
@@ -67,15 +88,14 @@ function draw_one_frame(cur_frac) {
  * @param r radius
  * @link https://editor.p5js.org/kybr/sketches/r_1FNQE5W
  */
-function hexagon(x, y, r, cur_frac) {
-	let spin_around_x = getNoiseValue(x, 1, 0, 'yo', 0, x, 1);
-	let spin_around_y = getNoiseValue(y, 1, 0, 'y', 0, y, 1);
-	let lets_spin_around_x = map(cur_frac, 1, 0, spin_around_x, x);
-	let lets_spin_around_y = map(cur_frac, 1, 0, spin_around_y, y);
+function hexagon(x, y, r, lines) {
 
 	push();
-	translate(lets_spin_around_x, lets_spin_around_y);
-	beginShape();
+	if (lines){
+		beginShape(LINES);
+	}else {
+		beginShape();
+	}
 	let angle = (2 * PI) / 6 / 2;
 	for (let i = 0; i < 6; i++) {
 	  vertex(x + r * cos(angle), y + r * sin(angle));
@@ -86,9 +106,10 @@ function hexagon(x, y, r, cur_frac) {
 	pop();
 }
 
-function honey_drop(x, y, cur_frac, light_color, dark_color, minusY){
+function honey_drop(x, y, cur_frac, light_color, dark_color, size){
 	fill(dark_color)
-	noStroke();
+	stroke(light_color);
+	strokeWeight(4)
 	let scale_height = 0;
 	let little_height = 0;
 	if(cur_frac <= 0.5){
@@ -104,14 +125,15 @@ function honey_drop(x, y, cur_frac, light_color, dark_color, minusY){
 	translate(x, y)
 	scale(1, scale_height)
 	rotate(45);
-	rect(0, 0, 30, 30, 3,40,40);
+	rect(0, 0, size, size, 3,40,40);
 	angleMode(RADIANS)
 	pop();
 	
 	push();
-	scale(1, little_height)
+	noStroke();
+	translate(x+5, y+25)
+	scale(1, scale_height)
 	fill(light_color)
-	translate(x+5, y-minusY)
 	ellipse(0, 0, 7, 15)
 	pop();
 }
