@@ -68,7 +68,7 @@ function drawRipple(gridX, gridY, cur_frac, size, startingX){
 }
 
 function draw_frog_row(debugView, grid_points, y, size, leftToRight, cur_frac, curve){
-  let isJumping = curve < 1;
+  let isJumping = curve < -1;
   
   if (debugView) {
     for(let i=0; i<grid_points.length; i++) {
@@ -89,14 +89,14 @@ function draw_frog_row(debugView, grid_points, y, size, leftToRight, cur_frac, c
     if (leftToRight){
       const ease_amount_across = ease.sineOut(cur_frac);
       let cur_x_pos = map(ease_amount_across, 0, 1, grid_points[i], grid_points[i+1])
-      let cur_x_posdrop = map(ease_amount_across, 0, 3, grid_points[i], grid_points[i+1])
-
+      
       if (!isJumping){
         push();
-        translate(width, 0)
+        scale(-1, 1)
         noStroke();
-        fill('blue')
-        ellipse(-cur_x_posdrop - 50, y, 20, 20)
+        fill(140, 3, 252)
+        let cur_x_music_note = map(ease_amount_across, 3, 0, grid_points[i], grid_points[i+1])
+        draw_music_note(-cur_x_music_note, y)
         pop();
       }
       draw_froggy(cur_x_pos, y, size, false, !isJumping)
@@ -111,18 +111,29 @@ function draw_frog_row(debugView, grid_points, y, size, leftToRight, cur_frac, c
       pop();
 
       if (isJumping){
-        let cur_x_posdrop = map(ease_amount_across, 0, 3, grid_points[i], grid_points[i+1])
+        let cur_x_music_note = map(ease_amount_across, 0, 3, grid_points[i], grid_points[i+1])
 
         push();
         scale(-1, 1);
-        translate(-width, 0);     
+        translate(-width, 0);
         noStroke();
-        fill('blue')
-        ellipse(cur_x_posdrop, y, 20, 20)
+        fill(140, 3, 252)
+        draw_music_note(cur_x_music_note - 90, y)
         pop();
       }
     }
   }
+}
+
+function draw_music_note(x, y){
+  // top bar
+  rect(x + 55, y+25, 30, 7)
+  // left area
+  rect(x +75, y+30, 10, 20)
+  circle(x +83, y+50, 15)
+  // right area
+  rect(x +55, y+30, 10, 20)
+  circle(x +63, y+50, 15)
 }
 
 function draw_froggy(x, y, size, isDebug, isJumping){
@@ -135,8 +146,8 @@ function draw_froggy(x, y, size, isDebug, isJumping){
     noFill();
   }
   else {
-    fill(2, 209, 54); 
-    stroke(0, 109, 0) //78, 24, 105
+    fill(2, 209, 54);
+    stroke(0, 109, 0);
     strokeWeight(3)
   }
 
