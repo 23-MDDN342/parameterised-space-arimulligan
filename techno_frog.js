@@ -4,6 +4,10 @@ function draw_one_frame(cur_frac) {
   // ripple stuff
   background('black');
 
+  let scaleX = width/960;
+  let scaleY = height/540;
+  push();
+  scale(scaleX, scaleY)
   // top and bottom ripples
   for (var i = 0; i < 3; i++){
 		for (var k = 0; k < 2; k++){
@@ -17,42 +21,43 @@ function draw_one_frame(cur_frac) {
     drawRipple(i*1.35, -0.7, cur_frac, 7, 150);
     drawRipple(i*1.35, 2.3, cur_frac, 7, 150);
   }
-
+  
   // frog jumping stuff - variables
-  let middleY = cos(cur_frac * 6) * 30 + height/2
-  let bottomY = sin(cur_frac * 6) * 30 + height/1.3
-  let topY = sin(cur_frac * 6) * 30 + height/5
+  let middleY = cos(cur_frac * 6) * 30 + 270
+  let bottomY = sin(cur_frac * 6) * 30 + 415.4
+  let topY = sin(cur_frac * 6) * 30 + 100
   let curve = sin(cur_frac * 6) * 30;
-
-  let frog_size = height/12;
-
+  
+  let frog_size = 45;
+  
   let grid_points_left = [
-   -0.25 * width,
-    0.25 * width,
-    0.75 * width,
-    1.25 * width
+    -0.25 * 960,
+    0.25 * 960,
+    0.75 * 960,
+    1.25 * 960
   ]
-
+  
   // middle
   draw_frog_row(debugView, grid_points_left, middleY, frog_size, true, cur_frac, curve);
-
+  
   let grid_points_right = [
-    1.10 * width,
-    0.60 * width,
-    0.10 * width,
-    -0.40 * width
+    1.10 * 960,
+    0.60 * 960,
+    0.10 * 960,
+    -0.40 * 960
   ]
-
+  
   // bottom
   draw_frog_row(debugView, grid_points_right, bottomY, frog_size, false, cur_frac, curve)
-
+  
   // top one
   draw_frog_row(debugView, grid_points_right, topY, frog_size, false, cur_frac, curve)
+  pop();
 }
 
 function drawRipple(gridX, gridY, cur_frac, size, startingX){
   for (let i = 15; i > 0; i--) {
-    let x = (width / 15) + (gridX * 400) + startingX;
+    let x = (960 / 15) + (gridX * 400) + startingX;
     let y = gridY + sin(cur_frac * 6 - i * 0.4) * 20 + (gridY * 200) + 150;
     if (startingX < 0){
       x += 80;
@@ -115,7 +120,7 @@ function draw_frog_row(debugView, grid_points, y, size, leftToRight, cur_frac, c
 
         push();
         scale(-1, 1);
-        translate(-width, 0);
+        translate(-960, 0);
         noStroke();
         fill(140, 3, 252)
         draw_music_note(cur_x_music_note - 90, y)
