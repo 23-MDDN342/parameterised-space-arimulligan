@@ -1,6 +1,3 @@
-let radius = 50;
-let speed = 0.33;
-
 let size_hexagons = 20;
 let smaller_sizehexagons = 12;
 
@@ -8,38 +5,31 @@ function draw_one_frame(cur_frac) {
 	let yellow_orange = color(242, 183, 5)
 	let orange = color(242, 135, 5)
 	let cream = color(242, 213, 160)
+	let darker_orange = color(242, 116, 5);
 	background(cream);
 
 	stroke(yellow_orange)
 	strokeWeight(10);
 	fill(orange)
 
-	// bees for the background ig
-	// for (let i = 2; i < 10; i++){
-		// let beeX = 0;
-		// let beeY = 0;
-		// if (i % 2==0){
-		// 	beeX = getNoiseValue(x, y, 1, i.toString(), 0, width/3, 100);
-		// 	beeY = sin(cur_frac * 6 - i * 0.4) * (30+i) + height/i;
+	// travelled bees
+	// the background
+	push();
+	translate(-100+cur_frac*450, 200);
+	buzzy_bee(50, 0, cur_frac, yellow_orange, 1.2, true)
+	pop();
 
-		// } else {
-		// 	beeX = getNoiseValue(x, y, 1, i.toString(), width/2, width-100, 100);
-		// 	beeY = cos(cur_frac * 6 - i * 0.4) * (30+i) + height/i;
-		// }
+	push();
+	translate(500+cur_frac*450, 400);
+	buzzy_bee(50, 0, cur_frac, yellow_orange, 1.2, true)
+	pop();
 
-		push();
-		translate(-100+cur_frac*450, 200);
-		// rotate(cur_frac * 6.1);
-		// draw shape as though (centerX, centerY) is the new
-		// origin / (0, 0) point
-		// rect(radius, 0, 50, 50);
-		buzzy_bee(radius, 0, cur_frac, yellow_orange, 1.2)
-		stroke('black')
-		point(radius, 0)
-		pop();
+	buzzy_bee(150, 400, cur_frac*cur_frac, yellow_orange, 1.2)
+	buzzy_bee(700, 150, cur_frac*cur_frac, yellow_orange, 1.2)
 	
 	// draw cow face shape
-	draw_honeycomb(height/3.3, height/1.3, width/2.7, width/1.6);
+	draw_honeycomb(height/3.1, height/1.5, width/2.5, width/1.7);
+	draw_honeycomb(height/1.5, height/1.1, width/2.7, width/1.6);
 
 	// ear shape
 	draw_honeycomb(height/5.2, height/3.3, width/3.4, width/1.4);
@@ -48,25 +38,22 @@ function draw_one_frame(cur_frac) {
 	draw_honeycomb(height/13, height/9, width/2.5, width/2.4);
 	draw_honeycomb(height/13, height/9, width/1.8, width/1.7);
 
-	// mouth area
-	draw_honeycomb(height/1.15, height/1.05, width/2.4, width/1.7);
-
-	honey_drop(width/1.45, height/4, cur_frac, yellow_orange, orange, 30)
-	honey_drop(width/2.9, height/5, cur_frac, yellow_orange, orange, 35);
+	honey_drop(width/1.45, height/4, cur_frac, yellow_orange, orange, 35)
+	honey_drop(width/2.9, height/4, cur_frac, yellow_orange, orange, 35);
 	honey_drop(width/2, height/6, cur_frac, yellow_orange, orange, 45);
-	honey_drop(width/1.68, height/1.25, cur_frac, yellow_orange, orange, 40);
-	honey_drop(width/1.95, height/1.3, cur_frac, yellow_orange, orange, 35);
-	honey_drop(width/2.6, height/2, cur_frac, yellow_orange, orange, 30);
+	honey_drop(width/1.68, height/1.5, cur_frac, yellow_orange, orange, 40);
+	honey_drop(width/2.35, height/1.5, cur_frac, yellow_orange, orange, 40);
+	// honey_drop(width/2.6, height/2, cur_frac, yellow_orange, orange, 30);
 
 	// bees for the cows face features
 	// the eyes
-	buzzy_bee(width/3.6, height/4, 2, cream, 1.5, true)
+	buzzy_bee(width/3.6, height/4, 2, cream, 1.5)
 	buzzy_bee(width/2.6, height/4, 4, cream, 1.5)
 
-	// the nose
-	buzzy_bee(width/1.9, height/1.3, cur_frac, cream, 1)
-	buzzy_bee(width/2.1, height/1.3, cur_frac, cream, 1)
-
+	// the mouth
+	buzzy_bee(width/3, height/1.65, 4, darker_orange, 1.5)
+	buzzy_bee(width/2.8, height/1.65, 2, darker_orange, 1.5)
+	buzzy_bee(width/3.2, height/1.65, 2, darker_orange, 1.5)
 
 }
 
@@ -190,21 +177,23 @@ function buzzy_bee(x, y, cur_frac, colour, size, mover){
 	ellipse(x+10, y+10, 35, 25)
 
 	// buzzy bees
-	rectMode(CENTER)
-	fill(colour)
-	ellipse(x, y, 35, 25)
-	fill('black')
-	rect(x, y, 5, 25, 30, 30, 30, 30)
-	rect(x-10, y, 5, 20, 30, 30, 30, 30)
-	rect(x+10, y, 5, 20, 30, 30, 30, 30)
-if(mover){
-	let manyLines = int(map(cur_frac, 0, 1, 0, 5));
-	for(let i =0; i <manyLines; i++ ){
-		stroke(colour)
-		line(x - 30*i, y, x - 40*i, y )
+	rectMode(CENTER);
+	fill(colour);
+	ellipse(x, y, 35, 25);
+	fill('black');
+	rect(x, y, 5, 25, 30, 30, 30, 30);
+	rect(x-10, y, 5, 20, 30, 30, 30, 30);
+	rect(x+10, y, 5, 20, 30, 30, 30, 30);
+
+	if (mover) {
+		let manyLines = int(map(cur_frac, 0, 1, 0, x));
+		for(let i =0; i < manyLines; i++ ){
+			stroke(colour);
+			strokeWeight(4);
+			line(i*-10, y, i*-10, y);
+		}
 	}
-}
-	 
+	
 	noStroke()
 	// for wings
 	fill(255, 255, 255, 200);
