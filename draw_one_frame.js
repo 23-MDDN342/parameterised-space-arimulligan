@@ -15,17 +15,17 @@ function draw_one_frame(cur_frac) {
 	// travelled bees
 	// the background
 	push();
-	translate(-100+cur_frac*450, 200);
+	translate(-100+cur_frac*(width/1.8), height/4);
 	buzzy_bee(50, 0, cur_frac, yellow_orange, 1.2, true)
 	pop();
 
 	push();
-	translate(500+cur_frac*450, 400);
+	translate(width/2+cur_frac*(width/1.8), height/1.5);
 	buzzy_bee(50, 0, cur_frac, yellow_orange, 1.2, true)
 	pop();
 
-	buzzy_bee(150, 400, cur_frac*cur_frac, yellow_orange, 1.2)
-	buzzy_bee(700, 150, cur_frac*cur_frac, yellow_orange, 1.2)
+	buzzy_bee(width/9, height/1.5, cur_frac*cur_frac, yellow_orange, 1.2)
+	buzzy_bee(width/1.5, height/3, cur_frac*cur_frac, yellow_orange, 1.2)
 	
 	// draw cow face shape
 	draw_honeycomb(height/3.1, height/1.5, width/2.5, width/1.7);

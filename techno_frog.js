@@ -236,7 +236,3 @@ function draw_froggy(x, y, size, isDebug, isJumping){
   angleMode(RADIANS); // changing it back for cosine function
   drawingContext.shadowBlur = 0;
 }
-
-// rippl e- need more contrast
-// should do multiple different submissions with different experiments?
-// making frogs interact with environment - splashing or something?
